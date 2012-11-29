@@ -1,3 +1,8 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'style', :plugin => 'redmine_extended_spent_time' %>
+  <%= javascript_include_tag 'timelog', :plugin => 'redmine_extended_spent_time' %>
+<% end %>
+
 <div id="timelog">
 <%
 if @user.pref.others[:spent_time_period].nil?
@@ -49,8 +54,8 @@ entries_by_day = entries.group_by(&:spent_on)
     </tr>
     <% entries_by_day[day].each do |entry| -%>
     <tr class="time-entry" style="border-bottom: 1px solid #f5f5f5;">
-    <td class="activity"><%=h entry.activity %></td>
-    <td class="subject"><%=h entry.project %> <%= ' - ' + link_to_issue(entry.issue, :truncate => 50) if entry.issue %></td>
+    <td class="activity"><%= entry.activity %></td>
+    <td class="subject"><%= entry.project %> - <%= link_to_issue(entry.issue, :truncate => 50) if entry.issue %></td>
     <td class="comments"><%=h entry.comments %></td>
     <td class="hours"><%= html_hours("%.2f" % entry.hours) %></td>
     <td align="center">
@@ -70,3 +75,20 @@ entries_by_day = entries.group_by(&:spent_on)
 </table>
 <% end %>
 </div>
+
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function(){
+  var base_url = "<%= url_for(:controller => 'extended_spent_time', :action => 'update') %>";
+  $('.spent-time-options-container a.select-link').each(function(){
+    $(this).bind('click', function(event) {
+        event.preventDefault();
+        var period = event.currentTarget.id;
+        var url = base_url + "?period=" + period;
+        $('#timelog').load(url, function() {});
+        return false;
+    });
+  });
+});
+//]]>
+</script>

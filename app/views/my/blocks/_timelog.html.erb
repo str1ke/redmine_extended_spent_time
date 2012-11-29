@@ -4,11 +4,3 @@
 <% end %>
 
 <%= render :partial => 'my/blocks/log' %>
-
-<script type="text/javascript">
-//<![CDATA[
-document.observe('dom:loaded', function() {
-  new ExtendedSpentTimePlugin.OptionsDisplayWidget("<%= url_for(:controller => 'extended_spent_time', :action => 'update') %>");
-});
-//]]>
-</script>

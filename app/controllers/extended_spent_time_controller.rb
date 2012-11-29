@@ -3,7 +3,8 @@ class ExtendedSpentTimeController < ApplicationController
 
   def update
     @user = User.current
-    @user.pref[:spent_time_period] = params[:period]
+    time = params[:period].gsub("w","").to_i
+    @user.pref[:spent_time_period] = time*7
     @user.pref.save
     
     respond_to do |format|
